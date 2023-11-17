@@ -1,69 +1,92 @@
+const sharp = require("sharp");
+const expressAsyncHandler = require("express-async-handler");
+const bcrypt = require("bcryptjs");
+
 const UserModel = require("../models/user_model");
-const asyncHandler = require("express-async-handler");
+const factory = require("./handlers_factory");
+const { uploadSingleImage } = require("../utils/upload_images");
 const ApiError = require("../utils/api_error");
+
+/**
+ * @description   upload user avatar via multer
+ */
+exports.uploadUserAvatar = uploadSingleImage("avatar");
+
+exports.resizeImage = expressAsyncHandler(async (req, res, next) => {
+  // console.log(req.file);
+  // console.log(req.body);
+  const filename = req.body.name;
+  await sharp(req.file.buffer)
+    .resize(400, 400)
+    .toFormat("jpeg", { mozjpeg: true })
+    .toFile(`uploads/user/${filename}.jpeg`);
+  req.body.avatar = `${filename}.jpeg`; // save avatar file into db
+  next();
+});
 
 /**
  * @description   get list of users
  * @route         GET  /api/v1/users
  * @access        Private
  */
-exports.getUsers = asyncHandler(async (req, res, next) => {
-  const page = req.query.page * 1 || 1;
-  const limit = 3;
-  const skip = (page - 1) * limit;
-  const users = await UserModel.find({}).skip(skip).limit(limit);
-  res.status(200).json({ results: users.length, page, data: users });
-});
+exports.getUsers = factory.getDocuments(UserModel);
 
 /**
  * @description   get a specific user
  * @route         GET  /api/v1/users/:id
  * @access        Public
  */
-exports.getUser = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
-  const user = await UserModel.findById(id);
-  if (!user) return next(new ApiError("No user for this id", 404));
-  res.status(200).json({ data: user });
-});
+exports.getUser = factory.getSpecificDocument(UserModel);
 
 /**
  * @description   create user
  * @route         POST  /api/v1/users
  * @access        Public
  */
-exports.createUser = asyncHandler(async (req, res, next) => {
-  const { name, dob, gender, mobile, user_type, images, height, weight } =
-    req.body;
-
-  const user = await UserModel.create({
-    name,
-    images,
-    dob,
-    gender,
-    mobile,
-    height,
-    weight,
-    user_type,
-  });
-  res.status(201).json({ data: user });
-});
+exports.createUser = factory.createDocument(UserModel);
 
 /**
  * @description   update a specific user
  * @route         PUT  /api/v1/users/:id
  * @access        Private
  */
-exports.updateUser = asyncHandler(async (req, res, next) => {
+exports.updateUser = expressAsyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  const { name, user_type, images, height, weight } = req.body;
-  const user = await UserModel.findOneAndUpdate(
+  const doc = await UserModel.findOneAndUpdate(
     { _id: id },
-    { name, user_type, images, height, weight },
-    { new: true }
+    {
+      name: req.body.name,
+      dob: req.body.dob,
+      lat: req.body.lat,
+      lng: req.body.lng,
+      address: req.body.address,
+      description: req.body.description,
+      mobile: req.body.mobile,
+      height: req.body.height,
+      weight: req.body.weight,
+      userType: req.body.userType,
+    },
+    {
+      new: true,
+    }
   );
-  if (!user) return next(new ApiError("No user for this id", 404));
-  res.status(200).json({ data: user });
+  if (!doc) return next(new ApiError("No doc for this id", 404));
+  res.status(200).json({ data: doc });
+});
+
+exports.updateUserPassword = expressAsyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  const doc = await UserModel.findOneAndUpdate(
+    { _id: id },
+    {
+      password: await bcrypt.hash(req.body.newPassword, 12),
+    },
+    {
+      new: true,
+    }
+  );
+  if (!doc) return next(new ApiError("No doc for this id", 404));
+  res.status(200).json({ data: doc });
 });
 
 /**
@@ -71,9 +94,4 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
  * @route         DELETE  /api/v1/users/:id
  * @access        Private
  */
-exports.deleteUser = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
-  const user = await UserModel.findByIdAndDelete(id);
-  if (!user) return next(new ApiError("No user for this id", 404));
-  res.status(200).json({ msg: "deleted successfully" });
-});
+exports.deleteUser = factory.deleteDocument(UserModel);
