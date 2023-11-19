@@ -28,7 +28,7 @@ exports.registerNewUser = expressAsyncHandler(async (req, res, next) => {
     expiresIn: process.env.JWT_EXPIRE_TIME,
   });
   if (!user) return next(new ApiError("No user for this id", 404));
-  res.status(200).json({ data: user, token });
+  res.status(200).json({ data: user, token: `Bearer ${token}` });
 });
 
 /**
@@ -48,7 +48,7 @@ exports.loginUser = expressAsyncHandler(async (req, res, next) => {
   const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY, {
     expiresIn: process.env.JWT_EXPIRE_TIME,
   });
-  res.status(200).json({ data: user, token });
+  res.status(200).json({ data: user, token: `Bearer ${token}` });
 });
 
 exports.isUserAuthenticated = expressAsyncHandler(async (req, res, next) => {
