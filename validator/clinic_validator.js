@@ -17,14 +17,14 @@ exports.deleteClinicValidator = [
 exports.createClinicValidator = [
   check("mainDoctor").isMongoId().withMessage("invalid user id"),
   check("name").notEmpty().withMessage("name field is required"),
-  check("lat").notEmpty().withMessage("lat field is required"),
-  check("lng").notEmpty().withMessage("lng field is required"),
-  check("address").notEmpty().withMessage("address field is required"),
+  // check("lat").notEmpty().withMessage("lat field is required"),
+  // check("lng").notEmpty().withMessage("lng field is required"),
+  // check("address").notEmpty().withMessage("address field is required"),
   check("specialty").notEmpty().withMessage("specialty field is required"),
-  check("mobile")
-    .notEmpty()
-    .withMessage("mobile field is required")
-    .isLength({ min: 11 })
-    .withMessage("wrong mobile"),
+  // check("mobile")
+  //   .notEmpty()
+  //   .withMessage("mobile field is required")
+  //   .isLength({ min: 11 })
+  //   .withMessage("wrong mobile"),
   validatorErrorsExplorer,
 ];

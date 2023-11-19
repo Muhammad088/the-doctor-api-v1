@@ -15,18 +15,21 @@ const {
   updateClinicValidator,
   deleteClinicValidator,
 } = require("../validator/clinic_validator");
+const {
+  isUserAuthenticated,
+  isAuthorized,
+} = require("../services/auth_services");
 
 const clinicRouter = Router();
 
-clinicRouter
-  .route("/")
-  .get(getClinics)
-  .post(
-    uploadClinicImages,
-    resizeClinicImages,
-    createClinicValidator,
-    createClinic
-  );
+clinicRouter.route("/").get(getClinics).post(
+  isUserAuthenticated,
+  isAuthorized("user"),
+  // uploadClinicImages,
+  // resizeClinicImages,
+  createClinicValidator,
+  createClinic
+);
 clinicRouter
   .route("/:id")
   .get(getClinicValidator, getClinic)

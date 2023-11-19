@@ -48,6 +48,6 @@ exports.createUserValidator = [
     .notEmpty()
     .withMessage("mobile field is required")
     .isLength({ min: 11 })
-    .withMessage("wrong dob"),
+    .withMessage("wrong mobile"),
   validatorErrorsExplorer,
 ];

@@ -4,19 +4,22 @@ const bcrypt = require("bcryptjs");
 const userSchema = new mongoose.Schema(
   {
     name: { type: String, required: [true, "name required"] },
-    password: { type: String, required: [true, "name required"] },
-    avatar: String,
-    dob: { type: String }, // required
-    lat: { type: Number }, // required
-    lng: { type: Number }, // required
-    address: { type: String }, // required
-    description: { type: String }, // required
-    gender: { type: String, required: [true, "gender required"] }, // required
+    password: { type: String, required: [true, "password required"] },
+    avatar: { type: String },
+    dob: { type: String },
+    lat: { type: Number },
+    lng: { type: Number },
+    address: { type: String },
+    description: { type: String },
+    resetPasswordCode: { type: String },
+    expiresIn: { type: Date },
+    passwordResetVerified: { type: Boolean },
+    gender: { type: String, required: [true, "gender required"] },
     mobile: {
       type: String,
       unique: [true, "mobile must be unique"],
       minlength: 11,
-    }, // required
+    },
     height: {
       type: Number,
       max: 250,
@@ -32,13 +35,13 @@ const userSchema = new mongoose.Schema(
       max: 300,
       min: 0,
     },
-    userType: { type: String, required: [true, "user_type required"] }, // required
+    userType: { type: String, default: "user" },
   },
   { timestamps: true }
 );
 
 function setImagesUrl(doc) {
-  if (doc.avatar !== "undefined" || doc.avatar.length > 1) {
+  if (doc.avatar) {
     const avatarUrl = `${process.env.BASE_URL}/user/${doc.avatar}`;
     doc.avatar = avatarUrl;
   }
