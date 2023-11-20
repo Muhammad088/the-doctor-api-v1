@@ -8,7 +8,6 @@ exports.registerUserValidator = [
   check("email")
     .notEmpty()
     .withMessage("email field is required")
-    .not()
     .isEmail()
     .withMessage("invalid email"),
   validatorErrorsExplorer,
@@ -18,7 +17,6 @@ exports.loginUserValidator = [
   check("email")
     .notEmpty()
     .withMessage("email field is required")
-    .not()
     .isEmail()
     .withMessage("invalid email"),
   validatorErrorsExplorer,
