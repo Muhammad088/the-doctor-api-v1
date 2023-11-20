@@ -5,21 +5,19 @@ const UserModel = require("../models/user_model");
 const ApiError = require("../utils/api_error");
 
 exports.registerUserValidator = [
-  check("name").notEmpty().withMessage("name field is required"),
-  check("gender").notEmpty().withMessage("gender field is required"),
-  check("mobile")
+  check("email")
     .notEmpty()
-    .withMessage("mobile field is required")
-    .isLength({ min: 11 })
-    .withMessage("wrong mobile"),
+    .withMessage("email field is required")
+    .not.isEmail()
+    .withMessage("invalid email"),
   validatorErrorsExplorer,
 ];
 
 exports.loginUserValidator = [
-  check("mobile")
+  check("email")
     .notEmpty()
-    .withMessage("mobile field is required")
-    .isLength({ min: 11 })
-    .withMessage("wrong mobile"),
+    .withMessage("email field is required")
+    .not.isEmail()
+    .withMessage("invalid email"),
   validatorErrorsExplorer,
 ];
