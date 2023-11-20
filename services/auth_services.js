@@ -17,9 +17,7 @@ const { sendWhatsappMessage } = require("./send_whatsapp");
 exports.registerNewUser = expressAsyncHandler(async (req, res, next) => {
   // create user
   const user = await UserModel.create({
-    name: req.body.name,
-    gender: req.body.gender,
-    mobile: req.body.mobile,
+    email: req.body.email,
     password: req.body.password,
     userType: "user",
   });
