@@ -37,7 +37,7 @@ exports.registerNewUser = expressAsyncHandler(async (req, res, next) => {
 exports.loginUser = expressAsyncHandler(async (req, res, next) => {
   // check if user exists
   const user = await UserModel.findOne({
-    email: req.body.mobile,
+    email: req.body.email,
   });
   if (!user || !(await bcrypt.compare(req.body.password, user.password)))
     return next(new ApiError("Wrong email or password", 401));
