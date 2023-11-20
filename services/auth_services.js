@@ -37,10 +37,10 @@ exports.registerNewUser = expressAsyncHandler(async (req, res, next) => {
 exports.loginUser = expressAsyncHandler(async (req, res, next) => {
   // check if user exists
   const user = await UserModel.findOne({
-    mobile: req.body.mobile,
+    email: req.body.mobile,
   });
   if (!user || !(await bcrypt.compare(req.body.password, user.password)))
-    return next(new ApiError("Wrong mobile or password", 401));
+    return next(new ApiError("Wrong email or password", 401));
 
   // generate token
   const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY, {
