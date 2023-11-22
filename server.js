@@ -28,7 +28,14 @@ app.use(compression());
 
 // middleware
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "uploads")));
+app.use(
+  express.static(
+    path.join(
+      "https://raw.githubusercontent.com/Muhammad088/the-doctor-api-v1/main",
+      "uploads"
+    )
+  )
+);
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev")); //request logger middleware

@@ -15,12 +15,12 @@ exports.uploadUserAvatar = uploadSingleImage("avatar");
 exports.resizeImage = expressAsyncHandler(async (req, res, next) => {
   // console.log(req.file);
   // console.log(req.body);
-  const filename = req.body.name;
+  const userId = req.body.id;
   await sharp(req.file.buffer)
     .resize(400, 400)
     .toFormat("jpeg", { mozjpeg: true })
-    .toFile(`uploads/user/${filename}.jpeg`);
-  req.body.avatar = `${filename}.jpeg`; // save avatar file into db
+    .toFile(`uploads/user/${userId}.jpeg`);
+  req.body.avatar = `${userId}.jpeg`; // save avatar file into db
   next();
 });
 

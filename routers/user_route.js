@@ -19,10 +19,7 @@ const {
 
 const userRouter = Router();
 
-userRouter
-  .route("/")
-  .get(getUsers)
-  .post(uploadUserAvatar, resizeImage, createUserValidator, createUser);
+userRouter.route("/").get(getUsers).post(createUserValidator, createUser);
 userRouter
   .route("/:id")
   .get(getUserValidator, getUser)
