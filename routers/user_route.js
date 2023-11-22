@@ -26,10 +26,12 @@ userRouter
 userRouter
   .route("/:id")
   .get(getUserValidator, getUser)
-  .put(uploadUserAvatar, resizeImage, updateUserValidator, updateUser)
+  .put(updateUserValidator, updateUser)
   .delete(deleteUserValidator, deleteUser);
 userRouter
   .route("/updatepass/:id")
   .put(updateUserPasswordValidator, updateUserPassword);
-
+userRouter
+  .route("/updatePhoto/:id")
+  .put(uploadUserAvatar, resizeImage, updateUserValidator, updateUser);
 module.exports = userRouter;

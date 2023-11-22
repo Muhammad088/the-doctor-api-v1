@@ -56,6 +56,8 @@ exports.updateUser = expressAsyncHandler(async (req, res, next) => {
     { _id: id },
     {
       name: req.body.name,
+      gender: req.body.gender,
+      avatar: req.body.avatar,
       dob: req.body.dob,
       lat: req.body.lat,
       lng: req.body.lng,
