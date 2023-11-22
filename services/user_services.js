@@ -14,8 +14,8 @@ exports.uploadUserAvatar = uploadSingleImage("avatar");
 
 exports.resizeImage = expressAsyncHandler(async (req, res, next) => {
   // console.log(req.file);
-  // console.log(req.body);
-  const userId = req.body.id;
+  const userId = req.params.id;
+  console.log(req.params);
   await sharp(req.file.buffer)
     .resize(400, 400)
     .toFormat("jpeg", { mozjpeg: true })
