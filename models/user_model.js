@@ -43,7 +43,7 @@ const userSchema = new mongoose.Schema(
 
 function setImagesUrl(doc) {
   if (doc.avatar) {
-    const avatarUrl = `${process.env.BASE_URL}/user/${doc.avatar}`;
+    const avatarUrl = `${doc.avatar}`;
     doc.avatar = avatarUrl;
   }
 }

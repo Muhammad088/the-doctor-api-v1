@@ -19,7 +19,7 @@ exports.resizeImage = expressAsyncHandler(async (req, res, next) => {
   await sharp(req.file.buffer)
     .resize(400, 400)
     .toFormat("jpeg", { mozjpeg: true })
-    .toFile(`${userId}.jpeg`);
+    .toFile(`uploads/user/${userId}.jpeg`);
   req.body.avatar = `${userId}.jpeg`; // save avatar file into db
   next();
 });
