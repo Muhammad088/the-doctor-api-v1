@@ -24,8 +24,8 @@ const userSchema = new mongoose.Schema(
     height: {
       type: Number,
       max: 250,
-      min: 70,
-      default: 165,
+      min: 0,
+      default: 0,
       // minlength: 3,
     },
     weight: {
