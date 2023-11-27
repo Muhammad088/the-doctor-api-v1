@@ -16,11 +16,7 @@ const { sendWhatsappMessage } = require("./send_whatsapp");
  */
 exports.registerNewUser = expressAsyncHandler(async (req, res, next) => {
   // create user
-  const user = await UserModel.create({
-    email: req.body.email,
-    password: req.body.password,
-    userType: "user",
-  });
+  const user = await UserModel.create(req.body);
   // generate token
   const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY, {
     expiresIn: process.env.JWT_EXPIRE_TIME,
