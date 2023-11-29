@@ -23,8 +23,8 @@ const {
 const clinicRouter = Router();
 
 clinicRouter.route("/").get(getClinics).post(
-  isUserAuthenticated,
-  isAuthorized("user"),
+  // isUserAuthenticated,
+  // isAuthorized("user"),
   // uploadClinicImages,
   // resizeClinicImages,
   createClinicValidator,
